@@ -1,0 +1,17 @@
+{%extends 'main.html'%}
+
+
+{%block content%}
+
+
+<div>
+    <form method="post" action="">
+        {%csrf_token%}
+        {{user_form.as_p}}
+        {{extra_form.as_p}}
+    <input type="submit" value="Submit">
+    <a href="{{request.META.HTTP_REFERER}}">Cancel</a>
+</form></div>
+
+
+{%endblock content%}

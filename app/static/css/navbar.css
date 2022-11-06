@@ -1,0 +1,12 @@
+.navbar{
+    background-color: rgb(64, 91, 130);
+    border: 5px;
+    border-color: blue;
+}
+.link-light{
+   color:rgb(7, 237, 168);
+}
+
+.link-dark{
+    color:rgb(64, 91, 130);
+}

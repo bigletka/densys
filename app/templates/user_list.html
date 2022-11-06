@@ -1,0 +1,38 @@
+{% extends 'main.html' %}
+
+
+
+{% block content %}
+<h1 class="d-flex justify-content-center">All users</h1>
+<h1 class="d-flex justify-content-center">Doctors:</h1>
+{% for user in object_list %}
+    <div>{% if user.is_doctor and not user.is_staff%}
+        <div class="d-flex justify-content-center">
+            <span>
+            <a href="{%url 'updateUser' user.email%}">{{user.first_name}} {{user.last_name}} {{user.email}}</a> 
+             </span>
+        <br>
+        </div>
+          
+    </div>
+    {%endif%}
+{% endfor %}
+
+<h1 class="d-flex justify-content-center">Patients:</h1>
+{% for user in object_list %}
+<div>{% if not user.is_doctor %}
+    <div>
+        <div class="d-flex justify-content-center">
+            <span>
+            <a href="{%url 'updateUser' user.email%}">{{user.first_name}} {{user.last_name}} {{user.email}}</a> 
+             </span>
+        <br>
+        <br>
+    </div>
+    
+</div>
+{%endif%}
+{% endfor %}
+
+
+{% endblock content %}
