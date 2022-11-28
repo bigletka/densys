@@ -112,5 +112,5 @@ class PatientForm(ModelForm):
 
     class Meta:
         model = Patient
-        fields = ('blood_group','emergency_phone_number', 'registration_date',)
+        fields = ('blood_group','emergency_phone_number')
        

@@ -112,10 +112,9 @@ class Doctor(models.Model):
 
 
 
-
-'''
+"""
 class Appointment(models.Model):
-    """The appointment of the patient"""
+    The appointment of the patient
     patient = models.ForeignKey(User,related_name='patient',on_delete=models.CASCADE)
     doctor = models.ForeignKey(User,related_name='doctor',on_delete=models.CASCADE, null=True)
     service = models.CharField(max_length=250)
@@ -143,8 +142,8 @@ class Appointment(models.Model):
     
     def __str__(self):
         return 'Appointment of the {self.patient.email}'
-'''
- 
+
+ """
 
 
 
