@@ -205,6 +205,14 @@ class DoctorList(ListView):
     model = Doctor
     template_name = 'doctor_list.html'
 
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            object_list = self.model.objects.filter(Q(category__icontains=query)|Q(user__last_name__icontains=query) | Q(user__first_name__icontains=query) | Q(user__iin_number__icontains=query))
+        else:
+            object_list = self.model.objects.all()
+        return object_list
+
 
 
 class AppointmentsPendingList(UserPassesTestMixin, ListView):

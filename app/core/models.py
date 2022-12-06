@@ -97,7 +97,7 @@ class Doctor(models.Model):
     price_of_the_appointement = models.IntegerField()
     degree = models.CharField(max_length=100)
     rating = models.IntegerField()
-    profile_photo = models.ImageField(null=True, default='/image.profile.png', upload_to='images/')
+    profile_photo = models.ImageField(null=True, default='static/images/profile.png', upload_to='static/images/')
     available_days = models.CharField(null=True, max_length=100)                                    
 
     def __str__(self):

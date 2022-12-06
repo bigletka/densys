@@ -12,8 +12,9 @@
         {% if not request.user.is_staff%}
         <li> <a href="make_an_appointment/">Make An Appointment</a></li>
         <hr>
-        <li><a href="{% url 'doctor_list'%}">Our Doctors</a></li>
         {%endif%}
+        <li><a href="{% url 'doctor_list'%}">Our Doctors</a></li>
+        <hr>
         <li> <a href="services/">Our Services</a></li>
         <hr>
         <li> <a href="contacts/">Contact Us</a></li>
