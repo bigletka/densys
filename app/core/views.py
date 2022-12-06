@@ -1,12 +1,12 @@
 import email
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Doctor, User, Patient
+from .models import Doctor, User, Patient, Appointment
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-from .forms import UserCreateForm, UserForm, PatientCreateForm,DoctorCreateForm,DoctorForm,PatientForm
+from .forms import UserCreateForm, UserForm, PatientCreateForm,DoctorCreateForm,DoctorForm,PatientForm, AppointmentForm, AppointmentUpdateForm
 from django.db.models import Q
 from django.views.generic import ListView, CreateView
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -81,7 +81,22 @@ class PatientRegister(UserPassesTestMixin, CreateView):
 
 
     
+class AppointmentCreateView(UserPassesTestMixin, CreateView):
+    model = Appointment
+    form_class = AppointmentForm
+    template_name = 'make_an_appointment.html'
 
+    def test_func(self):
+        return not self.request.user.is_doctor and not self.request.user.is_staff
+
+    def form_valid(self, form):
+        appointment = form.save(commit=False)
+        appointment.patient = Patient.objects.get(user=self.request.user)
+        appointment.save()
+        return redirect('home')
+
+
+  
 
 
 
@@ -103,10 +118,6 @@ class DoctorRegister(UserPassesTestMixin, CreateView):
     def form_valid(self, form):
         user = form.save()
         return redirect('adminPage')
-
-
-   
-
 
 
 
@@ -131,7 +142,7 @@ class UserView(UserPassesTestMixin, ListView):
     template_name = 'user_list.html'
 
 
-    
+   
 
 
 
@@ -166,7 +177,7 @@ def updateUser(request, pk):
                 user_form.save()
                 return redirect('adminPage')
         else:
-            if extra_form.is_valid and user_form.is_valid:
+            if extra_form.is_valid() and user_form.is_valid():
                 extra_form.save()
                 user_form.save()
                 return redirect('adminPage')
@@ -175,6 +186,58 @@ def updateUser(request, pk):
     return render(request, 'user_form.html', context)
 
 
+class AppointmentsList(UserPassesTestMixin, ListView):
+    """
+    Lists of appointments
+    """
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+    model = Appointment
+    template_name = 'appointment_list.html'
+
+
+class DoctorList(ListView):
+    """
+    Lists of Doctor
+    """
+    model = Doctor
+    template_name = 'doctor_list.html'
+
+
+
+class AppointmentsPendingList(UserPassesTestMixin, ListView):
+    """
+    List of appointments again
+    """
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    model = Appointment
+    template_name = 'appointment_pending_list.html'
+    
+
+
+
+def updateAppointment(request, pk):
+    """
+    staff able to update Appointment
+    """
+    if not request.user.is_staff:
+        return HttpResponse("This page does not exist")
+    
+    appointment = Appointment.objects.get(id=pk)
+    form = AppointmentUpdateForm(request.POST or None, instance=appointment)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('adminPage')
+
+    context = {'form':form}
+    return render(request, 'appointment_form.html', context)
 
 
 

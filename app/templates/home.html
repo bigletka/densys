@@ -2,15 +2,18 @@
 
 {% block content %}
 
-<h1>Main page</h1>
-<div>
-    <ul>
+<h1 class="d-flex justify-content-center">Main page</h1>
+<div class="d-flex justify-content-center">
+    <ul style="list-style:none;">
         {% if request.user.is_staff%}
         <li><a href="{% url 'adminPage' %}">For Admins</a></li>
         <hr>
         {% endif %}
+        {% if not request.user.is_staff%}
         <li> <a href="make_an_appointment/">Make An Appointment</a></li>
         <hr>
+        <li><a href="{% url 'doctor_list'%}">Our Doctors</a></li>
+        {%endif%}
         <li> <a href="services/">Our Services</a></li>
         <hr>
         <li> <a href="contacts/">Contact Us</a></li>

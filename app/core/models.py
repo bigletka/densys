@@ -57,7 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_doctor = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False) 
     is_active = models.BooleanField(default=True)
-    contact_number = models.CharField(validators = [RegexValidator(regex = r"^\+?1?\d{8,15}$")], max_length = 12, unique = True, default='+7')
+    contact_number = models.CharField(validators = [RegexValidator(regex = r"^\+?1?\d{8,15}$")], max_length = 12,  default='+7')
     marital_status = models.CharField(max_length=25)
     objects = UserManager()
     USERNAME_FIELD = 'email'
@@ -97,11 +97,11 @@ class Doctor(models.Model):
     price_of_the_appointement = models.IntegerField()
     degree = models.CharField(max_length=100)
     rating = models.IntegerField()
-    profile_photo = models.ImageField(null=True, default='image.profile.png')
+    profile_photo = models.ImageField(null=True, default='/image.profile.png', upload_to='images/')
     available_days = models.CharField(null=True, max_length=100)                                    
 
     def __str__(self):
-        return self.user.email
+        return '{name} {middle} {surname}'.format(name=self.user.first_name, middle = self.user.middle_name, surname = self.user.last_name)
      
 
 
@@ -112,11 +112,12 @@ class Doctor(models.Model):
 
 
 
-"""
+
 class Appointment(models.Model):
-    The appointment of the patient
-    patient = models.ForeignKey(User,related_name='patient',on_delete=models.CASCADE)
-    doctor = models.ForeignKey(User,related_name='doctor',on_delete=models.CASCADE, null=True)
+    """The appointment of the patient"""
+    
+    patient = models.ForeignKey(Patient,related_name='patient',on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor,related_name='doctor',on_delete=models.CASCADE, null=True)
     service = models.CharField(max_length=250)
     date = models.DateTimeField()
     status = models.CharField(default='pending',blank=True,max_length=25)
@@ -141,9 +142,9 @@ class Appointment(models.Model):
         return self
     
     def __str__(self):
-        return 'Appointment of the {self.patient.email}'
+        return 'Appointment of the {}'.format(self.patient.user.email)
 
- """
+
 
 
 

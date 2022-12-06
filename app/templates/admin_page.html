@@ -2,9 +2,20 @@
 
 {% block content %}
 
-<h1>ADMIN</h1>
-
-   <a href="{% url 'user_list' %}">All users</a>
+<h1 class="d-flex justify-content-center">ADMIN</h1>
+{%csrf_token%}
+<div class="d-flex justify-content-center">
+   <ul style="list-style:none;">
+      <li><a href="{% url 'user_list' %}">All users</a>
+         <hr></li>
+      <li><a href="{% url 'appointments'%}">All appointments</a>
+         <hr></li>
+      <li><a href="{% url 'appointment_pending'%}">All pending appointments</a></li>
+   </ul>
+   
+   
+</div>
+   
    
 
 

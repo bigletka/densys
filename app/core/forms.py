@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from email.policy import default
 from django.forms import ModelForm
-from .models import User, Patient, Doctor
+from .models import User, Patient, Doctor, Appointment
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserCreationForm
@@ -110,7 +110,47 @@ class PatientForm(ModelForm):
     Patient Form
     """
 
+  
+
     class Meta:
         model = Patient
+
         fields = ('blood_group','emergency_phone_number')
        
+
+
+ 
+
+class AppointmentForm(ModelForm):
+    """
+    Appointment Form
+    """
+
+  
+    class Meta:
+        model = Appointment
+        fields = ('doctor', 'service', 'date')
+
+
+
+CHOICES_for_appointment_status = (('pending','pending'),('approved','approve'),('rejected','reject'),)
+class AppointmentUpdateForm(ModelForm):
+    """
+    Appointment update form
+    """
+    stat = forms.MultipleChoiceField(choices=CHOICES_for_appointment_status)
+    class Meta:
+        model = Appointment
+        fields = ('id', 'patient', 'doctor', 'service', 'date', 'stat')
+
+    @transaction.atomic
+    def save(self):
+        appointment = super().save(commit=False)
+        data = self.data
+        appointment.status = data['stat']
+        print(data['stat'])
+        appointment.save()
+        return appointment
+
+    
+

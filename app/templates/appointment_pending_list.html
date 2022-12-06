@@ -1,0 +1,38 @@
+{% extends 'main.html' %}
+
+
+
+{% block content %}
+
+    <div >
+        <h1 class="d-flex justify-content-center">All pending appointments:</h1>
+        <hr>
+        <ul  style="list-style:none;">
+        {%for appointment in object_list%}
+        {% if appointment.status == 'pending' %}
+            <li> <a href="{% url 'appointment_update' appointment.id%}">Appointment #{{appointment.id}}:</a> </li>
+            <hr>
+            <li>Patient: {{appointment.patient.user.first_name}} {{appointment.patient.user.last_name}}
+                 
+            </li>
+            <li>
+                Doctor: {{appointment.doctor.user.first_name}} {{appointment.doctor.user.last_name}}
+            </li>
+            <li>
+                Date: {{appointment.date.date}} 
+            </li>
+            <li>Time: {{appointment.date.time}}</li>
+            <hr>
+           {% endif %}
+               
+     
+        {%endfor%}
+    </ul>
+    </div>
+
+
+
+
+
+
+{% endblock content %}

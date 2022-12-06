@@ -11,3 +11,4 @@ from core import models
 admin.site.register(models.User)
 admin.site.register(models.Patient)
 admin.site.register(models.Doctor)
+admin.site.register(models.Appointment)
