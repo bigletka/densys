@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-from .forms import UserCreateForm, UserForm, PatientCreateForm,DoctorCreateForm,DoctorForm,PatientForm, AppointmentForm, AppointmentUpdateForm
+from .forms import UserCreateForm, UserForm, PatientCreateForm,DoctorCreateForm,DoctorForm,PatientForm, AppointmentForm, AppointmentUpdateForm, AppointmentWithoutEmailForm
 from django.db.models import Q
 from django.views.generic import ListView, CreateView
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -83,12 +83,11 @@ class PatientRegister(UserPassesTestMixin, CreateView):
 
 def AppointmentCreate(request, email):
     user = User.objects.get(email=email)
-    user2 = User.objects.get(email=request.user.email)
     doctor = Doctor.objects.get(user=user)
-    patient = Patient.objects.get(user=user2)
-    form = AppointmentForm(initial={'patient':patient, 'doctor':doctor})
+    patient = Patient.objects.get(user=request.user)
+    form = AppointmentWithoutEmailForm(request.POST or None, initial={'patient':patient, 'doctor':doctor})
     if request.method == 'POST':
-        form = AppointmentForm(request.POST)
+        form = AppointmentWithoutEmailForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('home')

@@ -129,7 +129,7 @@ class AppointmentForm(ModelForm):
   
     class Meta:
         model = Appointment
-        fields = ('doctor', 'service', 'date')
+        fields = ( 'doctor', 'service', 'date')
 
 
 
@@ -154,3 +154,12 @@ class AppointmentUpdateForm(ModelForm):
 
     
 
+class AppointmentWithoutEmailForm(ModelForm):
+    """
+    Appointment Form
+    """
+
+  
+    class Meta:
+        model = Appointment
+        fields = ( 'patient', 'doctor', 'service', 'date')
