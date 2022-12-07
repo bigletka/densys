@@ -21,8 +21,11 @@
             <li></li>
             <li> <img src="{{doctor.profile_photo.url}}" alt="" width="200" height="200"></li>
             <li>{{doctor.user.first_name}} {{doctor.user.last_name}}</li>
-
+            {%if request.user.is_authenticated%}
+            <li><a href="{% url 'appointment_by_doctor' doctor.user.email%}">Make an appointment</a></li>
+            {%endif%}
             <hr>
+
      
         {%endfor%}
     </ul>

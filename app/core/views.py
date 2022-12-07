@@ -32,7 +32,7 @@ def loginPage(request):
         if user is not None:
             login(request, user)
             if user.is_staff:
-                return render(request, 'admin_page.html', context)
+                return redirect('adminPage')
             return redirect('home')
         else:
             messages.error(request, "Username OR Password does not exist")
@@ -80,7 +80,23 @@ class PatientRegister(UserPassesTestMixin, CreateView):
         return redirect('adminPage')
 
 
+
+def AppointmentCreate(request, email):
+    user = User.objects.get(email=email)
+    user2 = User.objects.get(email=request.user.email)
+    doctor = Doctor.objects.get(user=user)
+    patient = Patient.objects.get(user=user2)
+    form = AppointmentForm(initial={'patient':patient, 'doctor':doctor})
+    if request.method == 'POST':
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    return render(request, 'make_an_appointment.html', {'form':form}) 
     
+
+
+
 class AppointmentCreateView(UserPassesTestMixin, CreateView):
     model = Appointment
     form_class = AppointmentForm
@@ -88,6 +104,9 @@ class AppointmentCreateView(UserPassesTestMixin, CreateView):
 
     def test_func(self):
         return not self.request.user.is_doctor and not self.request.user.is_staff
+
+    
+
 
     def form_valid(self, form):
         appointment = form.save(commit=False)

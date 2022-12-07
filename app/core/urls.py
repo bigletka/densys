@@ -7,6 +7,7 @@ urlpatterns = [
     path('services/', views.services, name="services" ),
     path('contacts/', views.contacts, name='contacts'),
     path('make_an_appointment/', views.AppointmentCreateView.as_view(), name='appointment'),
+    path('appointment_by_doctor/<str:email>/', views.AppointmentCreate, name='appointment_by_doctor'),
     path('about_us/', views.about_us, name='about_us'),
     path('login/', views.loginPage, name='login'),
     path('logout/', views.logoutUser, name='logout'),
